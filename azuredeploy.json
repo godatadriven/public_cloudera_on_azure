@@ -234,9 +234,6 @@
           "dnsNamePrefix": {
             "value": "[parameters('dnsNamePrefix')]"
           },
-          "dnsNameSuffix": {
-            "value": "[parameters('dnsNameSuffix')]"
-          },
           "region": {
             "value": "[parameters('region')]"
           },
@@ -277,9 +274,6 @@
         "parameters": {
           "dnsNamePrefix": {
             "value": "[parameters('dnsNamePrefix')]"
-          },
-          "dnsNameSuffix": {
-            "value": "[parameters('dnsNameSuffix')]"
           },
           "region": {
             "value": "[parameters('region')]"
@@ -322,9 +316,6 @@
         "parameters": {
           "dnsNamePrefix": {
             "value": "[parameters('dnsNamePrefix')]"
-          },
-          "dnsNameSuffix": {
-            "value": "[parameters('dnsNameSuffix')]"
           },
           "region": {
             "value": "[parameters('region')]"

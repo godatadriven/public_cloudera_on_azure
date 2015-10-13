@@ -1,1 +1,2 @@
-azuredeployment-parameters.json
+deploy-cloudera.sh
+azuredeploy-parameters.json

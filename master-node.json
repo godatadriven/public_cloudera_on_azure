@@ -380,7 +380,8 @@
         "settings": {
           "fileUris": [
             "[concat(parameters('scriptsUri'), '/scripts/prepare-masternode-disks.sh')]",
-            "[concat(parameters('scriptsUri'), '/scripts/initialize-node.sh')]"
+            "[concat(parameters('scriptsUri'), '/scripts/initialize-node.sh')]",
+            "[concat(parameters('scriptsUri'), '/scripts/install-postgresql.sh')]"
           ],
           "commandToExecute": "[concat('sh initialize-node.sh \"', parameters('vmSpec').adminUserName, '\" ', 'masternode', ' \"', concat(variables('vmName'), copyIndex(),parameters('vmSpec').dnsNameSuffix), '\" \"', parameters('vmSpec').dns1IP, '\" \"', parameters('vmSpec').dns2IP, '\" \"', parameters('vmSpec').dns1Name, '\" \"', parameters('vmSpec').dns2Name, '\" \"', parameters('vmSpec').hadoopAdmin, '\" \"', parameters('vmSpec').domainName, '\" >> /home/$ADMINUSER/initialize-masternode.log 2>&1')]"
         }

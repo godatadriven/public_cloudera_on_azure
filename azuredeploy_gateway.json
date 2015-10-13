@@ -1,0 +1,211 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01-preview/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminUserName": {
+      "type": "string",
+      "defaultValue": "testuser",
+      "metadata": {
+        "description": "Admin user name for the Virtual Machines"
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Admin password for the Virtual Machines"
+      }
+    },
+    "storageAccountPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Unique namespace for the Storage Account where the Virtual Machine's disks will be placed"
+      }
+    },
+    "dnsNamePrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Unique public dns name where the Virtual Machines will be exposed"
+      }
+    },
+    "dnsNameSuffix": {
+      "type": "string",
+      "metadata": {
+        "description": "Internal DNS suffix"
+      }
+    },
+    "domainName": {
+      "type": "string",
+      "metadata": {
+        "description": "Domain name"
+      }
+    },
+    "hadoopAdmin": {
+      "type": "string",
+      "metadata": {
+        "description": "Hadoop admin who needs admin rights"
+      }
+    },
+    "dns1IP": {
+      "type": "string",
+      "metadata": {
+        "description": "DNS IP"
+      }
+    },
+    "dns2IP": {
+      "type": "string",
+      "metadata": {
+        "description": "DNS IP"
+      }
+    },
+    "dns1Name": {
+      "type": "string",
+      "metadata": {
+        "description": "DNS Name"
+      }
+    },
+    "dns2Name": {
+      "type": "string",
+      "metadata": {
+        "description": "DNS Name"
+      }
+    },
+    "region": {
+      "type": "string",
+      "defaultValue": "westeurope",
+      "metadata": {
+        "description": "Location where resources will be provisioned"
+      }
+    },
+    "storageAccountType": {
+      "type": "string",
+      "defaultValue": "Premium_LRS",
+      "metadata": {
+        "description": "The type of the Storage Account to be created (Default to Standard_LRS)"
+      }
+    },
+    "addressPrefix": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/24",
+      "metadata": {
+        "description": "Address prefix for the VNet"
+      }
+    },
+    "subnetPrefix": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/24",
+      "metadata": {
+        "description": "Subnet Prefix"
+      }
+    },
+    "nodeAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.0.0.",
+      "metadata": {
+        "description": "Prefix of the nodes IP"
+      }
+    },
+    "scriptUri": {
+      "type": "string",
+      "metadata": {
+        "description": "The public github repo where the scripts are."
+      }
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "defaultValue": "clouderavnet",
+      "metadata": {
+        "description": "The name of the virtual network provisioned for the deployment"
+      }
+    },
+    "vnetResourceGroup": {
+      "type": "string"
+    },
+    "subnetName": {
+      "type": "string",
+      "defaultValue": "clouderasubnet",
+      "metadata": {
+        "description": "Subnet name for the virtual network where resources will be provisioned"
+      }
+    },
+    "numberOfNodes": {
+      "type": "int",
+      "defaultValue": 1,
+      "metadata": {
+        "description": "Number of data nodes for Prod, default to 3"
+      }
+    },
+    "vmSize": {
+      "type": "string",
+      "defaultValue": "Standard_DS14",
+      "metadata": {
+        "description": "The size of the VMs deployed in the cluster (Defaults to Standard_D14)"
+      }
+    }
+  },
+  "variables": {
+    "scriptsUri": "[parameters('scriptUri')]",
+    "storageAccount": {
+      "prefix": "[parameters('storageAccountPrefix')]",
+      "type": "[parameters('storageAccountType')]"
+    },
+    "vmSpec": {
+      "vmSize": "[parameters('vmSize')]",
+      "privateIPAddressPrefix": "[parameters('nodeAddressPrefix')]",
+      "adminUserName": "[parameters('adminUserName')]",
+      "adminPassword": "[parameters('adminPassword')]",
+      "dnsNameSuffix": "[parameters('dnsNameSuffix')]",
+      "domainName": "[parameters('domainName')]",
+      "hadoopAdmin": "[parameters('hadoopAdmin')]",
+      "dns1IP": "[parameters('dns1IP')]",
+      "dns2IP": "[parameters('dns2IP')]",
+      "dns1Name": "[parameters('dns1Name')]",
+      "dns2Name": "[parameters('dns2Name')]"
+    },
+    "networkSpec": {
+      "addressPrefix": "[parameters('addressPrefix')]",
+      "subnetPrefix": "[parameters('subnetPrefix')]",
+      "privateIPPrefix": "[parameters('nodeAddressPrefix')]",
+      "virtualNetworkName": "[parameters('virtualNetworkName')]",
+      "virtualNetworkSubnetName": "[parameters('subnetName')]",
+      "gatewayNodeAddressStart": 5,
+      "VnetID": "[resourceId(parameters('vnetResourceGroup'),'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
+    }
+  },
+  "resources": [
+    {
+      "name": "gateway-node",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('scriptsUri'), '/gateway-node.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "dnsNamePrefix": {
+            "value": "[parameters('dnsNamePrefix')]"
+          },
+          "region": {
+            "value": "[parameters('region')]"
+          },
+          "scriptsUri": {
+            "value": "[variables('scriptsUri')]"
+          },
+          "storageAccount": {
+            "value": "[variables('storageAccount')]"
+          },
+          "vmCount": {
+            "value": "[parameters('numberOfNodes')]"
+          },
+          "vmSpec": {
+            "value": "[variables('vmSpec')]"
+          },
+          "networkSpec": {
+            "value": "[variables('networkSpec')]"
+          }
+        }
+      }
+    }
+  ]
+}

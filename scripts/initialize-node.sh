@@ -51,6 +51,9 @@ then
 elif [ "$NODETYPE" == "datanode" ]
 then
   bash ./prepare-datanode-disks.sh
+elif [ "$NODETYPE" == "gateway" ]
+then
+  bash ./prepare-gateway-disks.sh
 else
   echo "#unknown type, default to datanode"
   bash ./prepare-datanode-disks.sh

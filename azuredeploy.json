@@ -104,6 +104,12 @@
         "description": "Prefix of the nodes IP"
       }
     },
+    "scriptUri": {
+      "type": "string",
+      "metadata": {
+        "description": "The public github repo where the scripts are."
+      }
+    },
     "virtualNetworkName": {
       "type": "string",
       "defaultValue": "clouderavnet",

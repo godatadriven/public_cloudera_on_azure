@@ -148,7 +148,7 @@
     }
   },
   "variables": {
-    "scriptsUri": "https://raw.githubusercontent.com/godatadriven/public_cloudera_on_azure/master",
+    "scriptsUri": "[parameters('scriptUri')]",
     "storageAccount": {
       "prefix": "[parameters('storageAccountPrefix')]",
       "type": "[parameters('storageAccountType')]"

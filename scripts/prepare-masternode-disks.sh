@@ -108,16 +108,12 @@ mountDriveForCloudera()
 {
   dirname=/cloudera
   dirnameZookeeper=/var/lib/zookeeper
-  dirnameQJM=/data/dfs/
   dirnamePostGres=/var/lib/pgsql
 
   drivename=/dev/sdc
   mke2fs -F -t ext4 -b 4096 -E lazy_itable_init=1 -O sparse_super,dir_index,extent,has_journal,uninit_bg -m1 $drivename
   
   mkdir $dirname
-  mkdir $dirnameZookeeper
-  mkdir $dirnameQJM
-  mkdir $dirnamePostGres
   
   mount -o noatime,barrier=1 -t ext4 $drivename $dirname
   UUID=`sudo lsblk -no UUID $drivename`
@@ -130,7 +126,6 @@ mountDriveForCloudera()
 
   ln -s /cloudera/opt /opt/cloudera
   ln -s /cloudera/var/lib/zookeeper ${dirnameZookeeper}
-  ln -s /cloudera/data/dfs ${dirnameQJM}
   ln -s /cloudera/var/lib/pgsql ${dirnamePostGres}
 }
 

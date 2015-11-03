@@ -32,7 +32,7 @@ EOF
 
 cat > /etc/resolv.conf << EOF
 #!/bin/sh
-search bigdata.intra.schiphol.nl
+search $DOMAINNAME
 nameserver $DNS1IP
 nameserver $DNS2IP
 EOF
